@@ -367,7 +367,7 @@ app.delete("/api/artwork/:id", authMiddleware, async (req, res) => {
       path.basename(art.imageUrl)
     );
 
-    // 🧽 Delete image file from uploads folder if it exists
+    //  Delete image file from uploads folder if it exists
     fs.unlink(filePath, (err) => {
       if (err) {
         console.warn("Failed to delete image file:", err.message);
@@ -400,7 +400,7 @@ app.post('/api/profile/upload-dp', authMiddleware, upload.single('profileImage')
       });
     }
 
-    // 🖼️ Save new image URL
+    // Save new image URL
     user.profileImageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
     await user.save();
 
