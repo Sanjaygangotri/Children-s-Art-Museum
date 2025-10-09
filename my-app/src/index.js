@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './Login';
 import ResetPassword from './ResetPassword';
 import Profile from './profile';
-import ProtectedRoute from "./protectRoute";
 
 
 
@@ -24,9 +23,7 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<ProtectedRoute>
-      <Profile />
-    </ProtectedRoute>} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   </BrowserRouter>

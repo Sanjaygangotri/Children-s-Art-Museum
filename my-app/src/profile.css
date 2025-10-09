@@ -1,0 +1,384 @@
+/* ---------- GENERAL LAYOUT ---------- */
+.profile-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f9fafb, #e5e7eb);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+
+.loading-text,
+.login-text {
+  text-align: center;
+  padding-top: 100px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* ---------- PROFILE CARD ---------- */
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  width: 100%;
+  max-width: 900px;
+  animation: fadeIn 0.4s ease-in;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  width: 7em;
+  height: 7em;
+  border-radius: 50%;
+
+  border: 4px solid #ccc;
+}
+
+.profile-avatar:hover{
+  cursor: pointer;
+}
+
+.profile-avatar-container .Hero{
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* border: 1px solid black; */
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.profile-avatar-container .Hero:hover{
+  background-color: rgb(0, 0, 0, 0.3);
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.profile-avatar-container .Hero .Inside_hero{
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  z-index: 10;
+  opacity: 0;
+}
+.profile-avatar-container .Hero:hover .Inside_hero{
+  opacity: 1;
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.profile-info h1,
+.profile-info .school {
+  text-transform: capitalize;
+}
+
+
+.profile-info h1 {
+  font-size: 1.8rem;
+  color: #1f2937;
+  margin: 4px 0;
+}
+
+.profile-info p {
+  color: #4b5563;
+  margin: 2px 0;
+}
+
+.school {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ---------- ART GALLERY ---------- */
+.art-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.art-header h2 {
+  font-size: 1.4rem;
+  color: #1f2937;
+}
+
+.add-art-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease-in-out;
+}
+
+.add-art-btn:hover {
+  background-color: #1e40af;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.no-art {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  padding: 20px 0;
+}
+
+/* ---------- ART GRID ---------- */
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.art-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.art-card:hover {
+  transform: scale(1.03);
+}
+
+.art-card img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f3f4f6;
+}
+
+.art-info {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.art-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+.art-info p {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+
+.art-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* ---------- DELETE BUTTON ---------- */
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(239,68,68,0.9);
+  border: none;
+  color: #fff;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.art-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: rgba(220,38,38,1);
+}
+
+/* ---------- UPLOAD BOX ---------- */
+.upload-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preview-img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: #f3f4f6;
+}
+
+.upload-box input,
+.upload-box textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.upload-box textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.upload-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease-in-out;
+}
+
+.upload-btn:hover {
+  background-color: #1e40af;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+@media (max-width: 640px) {
+  .profile-card {
+    padding: 16px;
+  }
+
+  .profile-info h1 {
+    font-size: 1.4rem;
+  }
+
+  .art-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .art-card img {
+    max-height: 200px;
+  }
+}
+
+
+
+
+
+
+
+.art-info {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+/* Title is bigger and bold */
+.art-info h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+/* Metadata like Art by, Age, School */
+.art-info .metadata {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+/* Description */
+.art-info .description {
+  font-size: 0.95rem;
+  color: #1f2937;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Posted date smaller and lighter */
+.art-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+
+
+
+
+.profile-avatar-container {
+  /* border: 1px solid black; */
+  position: relative;
+  display: inline-block;
+}
+
+.change-dp-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: black;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.change-dp-btn:hover {
+  background-color: #333;
+}
+
+

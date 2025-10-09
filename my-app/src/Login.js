@@ -113,7 +113,8 @@ const Login = () => {
             const res = await fetch("http://localhost:5000/api/log_in", {  // API endpoint for login
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: loginEmail, password: loginPassword })
+                body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+                credentials: "include"
             });
 
             if (res.ok) {

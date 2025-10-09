@@ -3,11 +3,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { SMTPClient } = require('emailjs');
-const path = require('path');
-const userModel = require('./monoogseConnections');
+const userModel = require('./models/monoogseConnections');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const Artwork = require('./models/artworkmodel'); 
+const fs = require("fs");
+const path = require('path');
 
 
 const app = express();
@@ -22,13 +25,6 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-// Serve React static files
-app.use(express.static(path.join(__dirname, '..', 'my-app', 'build')));
-
-// Catch-all handler for React
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "my-app", "build", "index.html"));
-});
 
 
 
@@ -39,6 +35,25 @@ const client = new SMTPClient({
   host: 'smtp.gmail.com',
   ssl: true,
 });
+
+
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ storage });
+
+// Serve static images from uploads/
+app.use('/uploads', express.static('uploads'));
+
+
+
 
 app.post('/api/signup', async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
@@ -243,10 +258,14 @@ app.post('/api/log_in', async (req, res) => {
 
     // Send as HttpOnly cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // false on localhost
-      sameSite: "strict",
+      httpOnly: true,         // keep it secure from JS
+      secure: false,          // must be false on localhost
+      sameSite: "lax",        // allows cross-origin requests from your frontend
+      maxAge: 60 * 60 * 1000, // 1 hour
     });
+
+
+
 
 
     return res.status(200).json({ message: "Login successful" });
@@ -271,23 +290,166 @@ function authMiddleware(req, res, next) {
   }
 }
 
+
+
+
 app.get('/api/profile', authMiddleware, async (req, res) => {
   try {
     const user = await userModel.findById(req.user.userId).select('-password -resetToken -resetTokenExpiry');
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Example: you can also fetch submitted art data here if needed
     res.json({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       school: user.school,
-      // add more user fields as needed
+      profileImageUrl: user.profileImageUrl, // 🆕 Added this
     });
   } catch (error) {
     console.error("Profile fetch error:", error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+
+
+// POST: upload artwork
+app.post('/api/artwork', authMiddleware, upload.single('image'), async (req, res) => {
+  try {
+    const { title, description, artBy, age, school } = req.body; // <-- new fields
+
+    if (!req.file) return res.status(400).send("No image uploaded");
+
+    const newArt = await Artwork.create({
+      userId: req.user.userId,
+      title: title || req.file.originalname,
+      description: description || "",
+      artBy: artBy || "",
+      age: age || "",
+      school: school || "",
+      imageUrl: `http://localhost:5000/uploads/${req.file.filename}`,
+      createdAt: new Date(), // optional: store posting date
+    });
+
+    res.json(newArt);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to upload artwork");
+  }
+});
+
+
+
+// GET: fetch user artworks
+app.get('/api/artwork', authMiddleware, async (req, res) => {
+  try {
+    const arts = await Artwork.find({ userId: req.user.userId }).sort({ createdAt: -1 });
+    res.json(arts);
+  } catch (err) {
+    res.status(500).send("Failed to fetch artworks");
+  }
+});
+
+// DELETE: delete artwork
+app.delete("/api/artwork/:id", authMiddleware, async (req, res) => {
+  try {
+    const art = await Artwork.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.userId,
+    });
+
+    if (!art) return res.status(404).send("Artwork not found or unauthorized");
+
+    // 🧹 Extract filename from imageUrl (e.g., http://localhost:5000/uploads/xyz.jpg)
+    const filePath = path.join(
+      __dirname,
+      "uploads",
+      path.basename(art.imageUrl)
+    );
+
+    // 🧽 Delete image file from uploads folder if it exists
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.warn("Failed to delete image file:", err.message);
+      } else {
+        console.log("Deleted image file:", filePath);
+      }
+    });
+
+    res.json({ message: "Deleted successfully" });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).send("Failed to delete artwork");
+  }
+});
+
+
+// POST: Upload or update user profile image (DP)
+app.post('/api/profile/upload-dp', authMiddleware, upload.single('profileImage'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).send("No image uploaded");
+
+    const user = await userModel.findById(req.user.userId);
+    if (!user) return res.status(404).send("User not found");
+
+    // 🧹 Delete old DP if it’s not the default one
+    if (user.profileImageUrl && !user.profileImageUrl.includes("default-avatar.jpg")) {
+      const oldFilePath = path.join(__dirname, "uploads", path.basename(user.profileImageUrl));
+      fs.unlink(oldFilePath, (err) => {
+        if (err) console.warn("Failed to delete old DP:", err.message);
+      });
+    }
+
+    // 🖼️ Save new image URL
+    user.profileImageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+    await user.save();
+
+    res.json({ message: "Profile image updated", profileImageUrl: user.profileImageUrl });
+  } catch (err) {
+    console.error("DP upload error:", err);
+    res.status(500).send("Failed to upload profile image");
+  }
+});
+
+
+app.get("/api/gallery/museum", async (req, res) => {
+  try {
+    const { search, school, age, page = 1, limit = 6 } = req.query;
+
+    const query = {};
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { artBy: { $regex: search, $options: "i" } },
+      ];
+    }
+    if (school) query.school = school;
+    if (age) query.age = Number(age);
+
+    const artworks = await Artwork.find(query)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    const total = await Artwork.countDocuments(query);
+
+    res.json({ artworks, total });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
+
+// Serve React static files
+app.use(express.static(path.join(__dirname, '..', 'my-app', 'build')));
+
+// Catch-all handler for React
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "my-app", "build", "index.html"));
 });
 
 

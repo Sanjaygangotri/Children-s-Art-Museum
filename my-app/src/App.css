@@ -1,36 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Truculenta:opsz,wght@12..72,100..900&display=swap');
-.nav .summit_art {
-  border: 2px solid green;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 11em;
-  height: 3.5em;
-  background-color: black;
-  margin-right: 10px;
-  color: white;
-  border-radius: 5px;
-}
 
-.summit_art:hover {
-  background-color: white;
-  color: black;
-  cursor: pointer;
-  border: 2px solid black;
-  transition-property: all;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-in-out;
-}
-
-.summit_art span {
-  font-weight: 600;
-  font-size: 20px;
-}
-
+/* Root fonts */
 :root {
   --primary-font: 'Lato', sans-serif;
-  --secondary-font: "Truculenta", sans-serif;
+  --secondary-font: 'Truculenta', sans-serif;
 }
 
 /* Navbar Container */
@@ -82,19 +56,13 @@
   transition: background 0.2s, color 0.2s;
 }
 
-
-
 /* Dropdown Menu */
-.nav .main_nav > ul > li {
+.main_nav > ul > li {
   position: relative;
-  /* border: 1px solid black; */
-  display: flex;
-  width: auto;
-  /* height: 2em; */
 }
 
 .main_nav ul li ul.dropdown {
-  /* display: none; */
+  display: none;
   opacity: 0;
   position: absolute;
   top: 100%;
@@ -115,186 +83,157 @@
 
 .main_nav ul li ul.dropdown li {
   width: 100%;
-  /* border: 1px solid black; */
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   cursor: pointer;
-
-}
-
-.main_nav ul li ul.dropdown li:active{
-  background-color: gray;
 }
 
 .main_nav ul li ul.dropdown li a {
   padding: 0.75em 1em;
   color: #111;
   background: none;
-  border-radius: 0;
 }
 
 .main_nav ul li ul.dropdown li a:hover {
   background: #f2f2f2;
 }
 
-/* Hamburger Toggle (hidden by default) */
-.toggle, .main_nav .cross_icon {
-  display: none;
-}
-
-.nav .main_nav > ul > li .down_icon, .up_icon{
-  /* border: 1px solid black; */
+/* Dropdown icons */
+.nav .main_nav > ul > li .down_icon, .up_icon {
   position: absolute;
   right: 0;
-  top: 0.8rem;
+  top: 0.3rem;
 }
 
-.nav .main_nav > ul > li .up_icon{
+.nav .main_nav > ul > li .up_icon {
   display: none;
 }
 
-.main_nav > ul > li:hover .up_icon{
+.main_nav > ul > li:hover .up_icon {
   display: block;
-} 
+}
 
-.main_nav > ul > li:hover .down_icon{
+.main_nav > ul > li:hover .down_icon {
   display: none;
 }
 
+/* Summit Art Button */
+.nav .summit_art {
+  border: 2px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 11em;
+  height: 3.5em;
+  background-color: black;
+  margin-left: 10px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 
+.nav .summit_art:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+}
+
+.summit_art span {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* Hamburger toggle */
+.toggle, .main_nav .cross_icon {
+  display: none;
+  cursor: pointer;
+}
 
 @media screen and (max-width: 1300px) {
   .nav {
     position: fixed;
     top: 0;
-    left: -4.5rem;
-    width: 0%;
+    left: -100%;
+    width: 100%;
     height: 100%;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    border-right: 2px solid black;
-    background: white;
-    z-index: 10;
-    /* overflow-y: scroll; */
-    overflow-x: hidden;
-    /* overflow: hidden; */
+    background: #fff;
+    border-right: 0;
+    padding-top: 50px;
     transition: all 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+
+  .nav.Remover {
+    left: 0;
+  }
+
+  .nav img {
+    width: 150px;
+    margin-bottom: 2rem;
+  }
+
+  .main_nav {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .main_nav ul {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .main_nav > ul > li {
+    width: 80%;
+  }
+
+  .main_nav ul li a {
+    font-size: 1.5rem;
+  }
+
+  .main_nav ul li ul.dropdown {
+    position: static;
+    display: none;
+    opacity: 1;
+    box-shadow: none;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .main_nav ul li:hover ul.dropdown {
+    display: flex;
+  }
+
+  .toggle {
+    display: flex;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 50;
+  }
+
+  .main_nav .cross_icon {
+    display: flex;
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 
   .nav .summit_art {
     display: none;
   }
 
-  .nav img {
-    width: 150px;
-    position: relative;
-    top: 20px;
-    left: -5rem;
-  }
-
-  .nav .main_nav {
-    position: relative;
-    margin-top: 85px;
-    /* border: 2px solid black; */
-    width: 100%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .main_nav > ul {
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    /* border: 2px solid black; */
-    height: 90%;
-    gap: 50px;
-  }
-
-  .main_nav > ul > li {
-    /* border: 2px solid black; */
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    /* position: relative; */
-  }
-
-  .main_nav ul li a {
-    font-size: 30px;
-  }
-
-  .main_nav ul li ul.dropdown {
-    border-color: white;
-    font-size: 0px;
-    /* border: 2px solid beige; */
-    width: 100%;
-    height: 0;
-    transition: all 0.2s ease-in-out;
-  }
-
-  .main_nav ul li:hover ul.dropdown {
-    font-size: 25px;
-    width: 110%;
-    height: auto;
-    position: static;
-    box-shadow: none;
-  }
-
-  .main_nav ul li:hover ul.dropdown li {
-    display: flex;
-    width: 80%;
-    justify-content: space-between;
-    align-items: center;
-    align-content: center;
-  }
-
-  .main_nav ul li ul.dropdown li .Arrow {
-    display: inline;
-  }
-
-  .nav .main_nav .cross_icon {
-    display: block;
-    /* border: 2px solid black; */
-    position: absolute;
-    top: -70px;
-    right: 5px;
-  }
-
-  .toggle {
-    border-radius: 5px;
-    display: flex;
-    margin-top: 8px;
-    margin-left: 8px;
-    width: 30px;
-    justify-content: end;
-    /* border: 2px solid black; */
-  }
-
-
-  .toggle span {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .Remover {
-    width: 40%;
-  }
-
-  .blurred> :not(.nav) {
+  .blurred > :not(.nav) {
     filter: blur(5px);
     pointer-events: none;
   }
 }
+
 
 
 .hero {
