@@ -11,6 +11,8 @@ const multer = require('multer');
 const Artwork = require('./models/artworkmodel'); 
 const fs = require("fs");
 const path = require('path');
+require('dotenv').config();
+
 
 
 const app = express();
@@ -23,7 +25,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 app.use(cookieParser());
 app.use(cors({
   origin: [
-    "${FRONTEND_URL}",
+    FRONTEND_URL,
     "https://children-art-museum.vercel.app" 
   ], 
   credentials: true, // needed for cookies
@@ -460,8 +462,8 @@ app.get(/.*/, (req, res) => {
 
 
 
-// app.listen(5000, 'localhost', () => {
-//   console.log("Server is listening at http://localhost:5000/");
-// });
+app.listen(5000, 'localhost', () => {
+  console.log("Server is listening at http://localhost:5000/");
+});
 
-module.exports = app;
+// module.exports = app;

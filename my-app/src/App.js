@@ -37,7 +37,7 @@ const App = () => {
   // Handler function to navigate to /login 
   const handleSummitArtClick = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/profile', {
+      const res = await fetch('https://children-art-museum.vercel.app/api/profile', {
         credentials: "include",
       });
 
