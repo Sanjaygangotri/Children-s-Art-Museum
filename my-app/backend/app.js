@@ -15,11 +15,17 @@ const path = require('path');
 
 const app = express();
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+
+
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:3000", // or your deployed frontend URL
+  origin: [
+    "${FRONTEND_URL}",
+    "https://children-art-museum.vercel.app" 
+  ], 
   credentials: true, // needed for cookies
 }));
 
@@ -94,7 +100,7 @@ app.post('/api/signup', async (req, res) => {
                 <h2 style="color: black;">Thank you, ${firstName}!</h2>
                 <p style="color: black;">You can now log in anytime.</p>
                 <a 
-                  href="http://localhost:3000/login"
+                  href="${FRONTEND_URL}/login"
                   style="
                     display:inline-block;
                     padding:10px 20px;
@@ -150,7 +156,7 @@ app.post('/api/forgot-password', async (req, res) => {
     user.resetTokenExpiry = expiry;
     await user.save();
 
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
 
 
 
@@ -327,7 +333,7 @@ app.post('/api/artwork', authMiddleware, upload.single('image'), async (req, res
       artBy: artBy || "",
       age: age || "",
       school: school || "",
-      imageUrl: `http://localhost:5000/uploads/${req.file.filename}`,
+      imageUrl: `${FRONTEND_URL}/uploads/${req.file.filename}`,
       createdAt: new Date(), // optional: store posting date
     });
 
@@ -401,7 +407,7 @@ app.post('/api/profile/upload-dp', authMiddleware, upload.single('profileImage')
     }
 
     // Save new image URL
-    user.profileImageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+    user.profileImageUrl = `${FRONTEND_URL}/uploads/${req.file.filename}`;
     await user.save();
 
     res.json({ message: "Profile image updated", profileImageUrl: user.profileImageUrl });
@@ -454,6 +460,8 @@ app.get(/.*/, (req, res) => {
 
 
 
-app.listen(5000, 'localhost', () => {
-  console.log("Server is listening at http://localhost:5000/");
-});
+// app.listen(5000, 'localhost', () => {
+//   console.log("Server is listening at http://localhost:5000/");
+// });
+
+module.exports = app;
