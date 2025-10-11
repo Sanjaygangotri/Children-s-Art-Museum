@@ -462,8 +462,8 @@ app.get(/.*/, (req, res) => {
 
 
 
-app.listen(5000, 'localhost', () => {
-  console.log("Server is listening at http://localhost:5000/");
-});
+// app.listen(5000, 'localhost', () => {
+//   console.log("Server is listening at http://localhost:5000/");
+// });
 
-// module.exports = app;
+module.exports = app;
