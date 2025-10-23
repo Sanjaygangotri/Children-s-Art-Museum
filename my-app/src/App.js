@@ -40,7 +40,9 @@ const App = () => {
       // const res = await fetch('http://localhost:3000/api/profile', {
       //   credentials: "include",
       // });
-      const res  = await fetch(`${process.env.REACT_APP_API_URL}/api/profile`)
+      const res  = await fetch(`${process.env.REACT_APP_API_URL}/api/profile`, {
+        credentials: "include",
+      })
 
 
       if (res.status === 200) {

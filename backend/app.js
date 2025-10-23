@@ -26,6 +26,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     FRONTEND_URL,
+    "http://localhost:3000",
     "https://children-art-museum.vercel.app" 
   ], 
   credentials: true, // needed for cookies
@@ -461,7 +462,8 @@ app.get(/.*/, (req, res) => {
 
 
 
-app.listen(5000, 'localhost', () => {
-  console.log("Server is listening at http://localhost:5000/");
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server running on port ${process.env.PORT || 5000}`);
 });
+
 
