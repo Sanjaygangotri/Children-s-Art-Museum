@@ -26,7 +26,7 @@ const ArtGallery = () => {
         limit,
       }).toString();
 
-      const res = await fetch(`http://localhost:5000/api/gallery/museum?${query}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/gallery/museum?${query}`);
       const data = await res.json();
 
       setArtworks(data.artworks);

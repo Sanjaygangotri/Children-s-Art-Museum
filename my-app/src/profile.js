@@ -22,13 +22,13 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileAndArt = async () => {
       try {
-        const profileRes = await fetch("http://localhost:5000/api/profile", {
+        const profileRes = await fetch(`${process.env.REACT_APP_API_URL}/api/profile`, {
           credentials: "include",
         });
         if (profileRes.ok) setUser(await profileRes.json());
         else setUser(null);
 
-        const artRes = await fetch("http://localhost:5000/api/artwork", {
+        const artRes = await fetch(`${process.env.REACT_APP_API_URL}/api/artwork`, {
           credentials: "include",
         });
         if (artRes.ok) setArtPosts(await artRes.json());
@@ -57,7 +57,7 @@ const Profile = () => {
     formData.append("profileImage", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/profile/upload-dp", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/profile/upload-dp`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -95,7 +95,7 @@ const Profile = () => {
     formData.append("description", description);
 
     try {
-      const res = await fetch("http://localhost:5000/api/artwork", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/artwork`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -122,7 +122,7 @@ const Profile = () => {
   // Delete artwork
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/artwork/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/artwork/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

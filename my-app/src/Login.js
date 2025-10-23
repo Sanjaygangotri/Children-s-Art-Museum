@@ -47,7 +47,7 @@ const Login = () => {
             return;
         }
         try {
-            const res = await fetch("https://children-art-museum.vercel.app/api/signup", {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(SignupForm)
@@ -75,7 +75,7 @@ const Login = () => {
             return;
         }
         try {
-            const res = await fetch("https://children-art-museum.vercel.app/api/forgot-password", {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/forgot-password`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: ForgoEmail })
@@ -110,7 +110,7 @@ const Login = () => {
         }
 
         try {
-            const res = await fetch("https://children-art-museum.vercel.app/api/log_in", {  // API endpoint for login
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/log_in`, {  // API endpoint for login
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: loginEmail, password: loginPassword }),
